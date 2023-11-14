@@ -10,7 +10,7 @@ import (
 func segmentName(prefix string, id uint64, mp4 bool, ignoreSegmentId bool) string {
 	if mp4 {
 		if ignoreSegmentId {
-			return prefix + ".mp4"
+			return prefix + ".m4s"
 		}
 		return prefix + "_seg" + strconv.FormatUint(id, 10) + ".mp4"
 	}
