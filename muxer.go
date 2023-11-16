@@ -98,6 +98,7 @@ type Muxer struct {
 
 // Start initializes the muxer.
 func (m *Muxer) Start() error {
+	fmt.Printf("START_MUXER\n\n")
 	if m.Variant == 0 {
 		m.Variant = MuxerVariantLowLatency
 	}
