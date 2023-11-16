@@ -356,6 +356,8 @@ func (m *muxerSegmenterFMP4) writeVideo(
 		return err
 	}
 
+	fmt.Println("HERE %d", timeNow.Second())
+
 	// switch segment
 	if randomAccess &&
 		(((m.writeSegmentsOnClockInterval && int(timeNow.Second()) % m.secondsInterval == 0)) ||
