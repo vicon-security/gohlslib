@@ -357,7 +357,6 @@ func (m *muxerSegmenterFMP4) writeVideo(
 	}
 
 	fmt.Printf("HERE %d\n\n", timeNow.Second())
-	asdf
 
 	// switch segment
 	if randomAccess &&
