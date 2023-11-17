@@ -373,6 +373,6 @@ func (m *Muxer) Handle(w http.ResponseWriter, r *http.Request) {
 	m.server.handle(w, r)
 }
 
-func (m *Muxer) queueStopSegments() {
+func (m *Muxer) QueueStopSegments() {
 	m.segmenter.queueToStop()
 }
