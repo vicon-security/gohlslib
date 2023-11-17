@@ -351,6 +351,10 @@ func (m *Muxer) WriteH26x(ntp time.Time, pts time.Duration, au [][]byte) error {
 		forceSwitch = true
 	}
 
+	if m.segmenter.isStopped() {
+		return nil
+	}
+
 	return m.segmenter.writeH26x(ntp, pts, au, randomAccess, forceSwitch)
 }
 
@@ -367,4 +371,8 @@ func (m *Muxer) WriteMPEG4Audio(ntp time.Time, pts time.Duration, aus [][]byte) 
 // Handle handles a HTTP request.
 func (m *Muxer) Handle(w http.ResponseWriter, r *http.Request) {
 	m.server.handle(w, r)
+}
+
+func (m *Muxer) queueStopSegments() {
+	m.segmenter.queueToStop()
 }

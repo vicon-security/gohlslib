@@ -116,6 +116,9 @@ type muxerSegmenterFMP4 struct {
 	// Force segments to be created/written at specific times of the day
 	writeSegmentsOnClockInterval	bool
 	secondsInterval								int
+
+	queuedToStopSegments					bool
+	stopSegments									bool
 }
 
 func newMuxerSegmenterFMP4(
@@ -374,6 +377,13 @@ func (m *muxerSegmenterFMP4) writeVideo(
 
 		m.firstSegmentFinalized = true
 
+		if m.queuedToStopSegments {
+			m.queuedToStopSegments = false
+			m.stopSegments = true
+			m.currentSegment = nil
+			return nil
+		}
+
 		m.currentSegment, err = newMuxerSegmentFMP4(
 			m.lowLatency,
 			m.genSegmentID(),
@@ -531,4 +541,12 @@ func (m *muxerSegmenterFMP4) writeAudio(ntp time.Time, dts time.Duration, au []b
 	}
 
 	return nil
+}
+
+func (m *muxerSegmenterFMP4) queueToStop() {
+	m.queuedToStopSegments = true
+}
+
+func (m *muxerSegmenterFMP4) isStopped() (bool) {
+	return m.stopSegments
 }
