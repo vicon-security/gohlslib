@@ -13,4 +13,5 @@ type muxerSegmenter interface {
 	writeMPEG4Audio(time.Time, time.Duration, [][]byte) error
 	queueToStop()
 	isStopped() bool
+	startSegments()
 }

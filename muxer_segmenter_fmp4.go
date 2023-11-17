@@ -550,3 +550,7 @@ func (m *muxerSegmenterFMP4) queueToStop() {
 func (m *muxerSegmenterFMP4) isStopped() (bool) {
 	return m.stopSegments
 }
+
+func (m *muxerSegmenterFMP4) startSegments() {
+	m.stopSegments = false
+}

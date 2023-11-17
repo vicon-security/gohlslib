@@ -274,3 +274,5 @@ func (m *muxerSegmenterMPEGTS) queueToStop() { }
 func (m *muxerSegmenterMPEGTS) isStopped() (bool) {
 	return false
 }
+
+func (m *muxerSegmenterMPEGTS) startSegments() { }
