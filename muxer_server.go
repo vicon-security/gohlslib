@@ -953,3 +953,7 @@ func (s *muxerServer) publishSegment(segment muxerSegment) error {
 	s.cond.Broadcast()
 	return nil
 }
+
+func (s *muxerServer) setRemoveStartupSegment() {
+	s.removeStartupSegment = true
+}

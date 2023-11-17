@@ -382,5 +382,6 @@ func (m *Muxer) QueueStopSegments() {
 }
 
 func (m *Muxer) StartSegments() {
+	m.server.setRemoveStartupSegment()
 	m.segmenter.startSegments()
 }
