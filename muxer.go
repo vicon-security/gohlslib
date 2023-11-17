@@ -85,6 +85,9 @@ type Muxer struct {
 	// than saving them on RAM, but allows to preserve RAM.
 	Directory string
 
+	// If segments are not in the same location as playlist itself
+	SegmentURIPrefix string
+
 	//
 	// private
 	//
@@ -162,6 +165,7 @@ func (m *Muxer) Start() error {
 		m.prefix,
 		m.storageFactory,
 		m.PlaylistMinutesInterval,
+		m.SegmentURIPrefix,
 	)
 
 	if m.Variant == MuxerVariantMPEGTS {

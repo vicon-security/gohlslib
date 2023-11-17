@@ -1,6 +1,7 @@
 package gohlslib
 
 import (
+	"fmt"
 	"io"
 	"math"
 	"net/http"
@@ -276,6 +277,7 @@ func updateMediaPlaylistFMP4(
 	segment muxerSegment,
 	initFilename string,
 	playlistFullPath string,
+	segmentURIPrefix string,
 ) {
 	targetDuration := targetDuration([]muxerSegment{segment})
 	fileExist := true
@@ -303,9 +305,17 @@ func updateMediaPlaylistFMP4(
 
 	switch seg := segment.(type) {
 		case *muxerSegmentFMP4:
+			segURI := seg.name
+
+			if len(segmentURIPrefix) > 0 {
+				plTime, _ := time.Parse("2006-01-02T15:04:05Z", initFilename)
+				dateFolder := fmt.Sprintf("%d/%02d/%02d/%02d", plTime.Year(), plTime.Month(), plTime.Day(), plTime.Hour())
+				segURI = fmt.Sprintf("%s/%s/%s", segmentURIPrefix, dateFolder, seg.name)
+			}
+
 			plse := &playlist.MediaSegment{
 				Duration: seg.getDuration(),
-				URI:      seg.name,
+				URI:      segURI,
 			}
 
 			pl.Segments = append(pl.Segments, plse)
@@ -505,6 +515,8 @@ type muxerServer struct {
 	playlistName				 		string
 	removeStartupSegment		bool
 	playlistMinutesInterval time.Duration
+
+	segmentURIPrefix				string
 }
 
 func newMuxerServer(
@@ -515,6 +527,7 @@ func newMuxerServer(
 	prefix string,
 	storageFactory storage.Factory,
 	playlistMinutesInterval time.Duration,
+	segmentURIPrefix string,
 ) *muxerServer {
 	s := &muxerServer{
 		variant:        variant,
@@ -528,6 +541,7 @@ func newMuxerServer(
 		playlistName:		time.Now().Format("2006-01-02T15:04:05.000Z"),
 		removeStartupSegment: true,
 		playlistMinutesInterval: playlistMinutesInterval,
+		segmentURIPrefix: segmentURIPrefix,
 	}
 
 	s.cond = sync.NewCond(&s.mutex)
@@ -928,7 +942,7 @@ func (s *muxerServer) publishSegment(segment muxerSegment) error {
 			generateInitFile(s.videoTrack, s.audioTrack, s.storageFactory, s.playlistName)
 		}
 
-		updateMediaPlaylistFMP4(segment, s.playlistName, playlistFullpath)
+		updateMediaPlaylistFMP4(segment, s.playlistName, playlistFullpath, s.segmentURIPrefix)
 
 		return nil
 	}()
