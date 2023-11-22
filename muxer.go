@@ -99,7 +99,7 @@ type Muxer struct {
 	forceSwitch    bool
 
 	// JJV DEBUG
-	testPrint			 func(msg string)
+	TestPrint			 func(msg string)
 }
 
 // Start initializes the muxer.
@@ -195,7 +195,7 @@ func (m *Muxer) Start() error {
 			m.server.publishPart,
 			m.WriteSegmentsOnClockInterval,
 			m.SegmentSecondsInterval,
-			m.testPrint,
+			m.TestPrint,
 		)
 	}
 
