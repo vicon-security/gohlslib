@@ -268,3 +268,11 @@ func (m *muxerSegmenterMPEGTS) writeMPEG4Audio(ntp time.Time, pts time.Duration,
 
 	return nil
 }
+
+func (m *muxerSegmenterMPEGTS) queueToStop() { }
+
+func (m *muxerSegmenterMPEGTS) isStopped() (bool) {
+	return false
+}
+
+func (m *muxerSegmenterMPEGTS) startSegments() { }

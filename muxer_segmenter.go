@@ -11,4 +11,7 @@ type muxerSegmenter interface {
 	writeH26x(time.Time, time.Duration, [][]byte, bool, bool) error
 	writeOpus(time.Time, time.Duration, [][]byte) error
 	writeMPEG4Audio(time.Time, time.Duration, [][]byte) error
+	queueToStop()
+	isStopped() bool
+	startSegments()
 }
