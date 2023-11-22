@@ -88,6 +88,9 @@ type Muxer struct {
 	// If segments are not in the same location as playlist itself
 	SegmentURIPrefix string
 
+	// JJV DEBUG
+	TestPrint			 func(msg string)
+
 	//
 	// private
 	//
@@ -97,9 +100,6 @@ type Muxer struct {
 	server         *muxerServer
 	segmenter      muxerSegmenter
 	forceSwitch    bool
-
-	// JJV DEBUG
-	TestPrint			 func(msg string)
 }
 
 // Start initializes the muxer.

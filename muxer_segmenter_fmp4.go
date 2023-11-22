@@ -90,6 +90,10 @@ type augmentedAudioSample struct {
 }
 
 type muxerSegmenterFMP4 struct {
+	// JJV DEBUG
+	LastSegmentCreatedAt					time.Time
+	TestPrint											func(msg string)
+
 	lowLatency      bool
 	segmentDuration time.Duration
 	partDuration    time.Duration
@@ -119,10 +123,6 @@ type muxerSegmenterFMP4 struct {
 
 	queuedToStopSegments					bool
 	stopSegments									bool
-
-	// JJV DEBUG
-	lastSegmentCreatedAt					time.Time
-	TestPrint											func(msg string)
 }
 
 func newMuxerSegmenterFMP4(
@@ -156,7 +156,7 @@ func newMuxerSegmenterFMP4(
 		secondsInterval: secondsInterval,
 
 		// JJV DEBUG
-		lastSegmentCreatedAt: time.Now(),
+		LastSegmentCreatedAt: time.Now(),
 		TestPrint: TestPrint,
 	}
 
@@ -369,11 +369,11 @@ func (m *muxerSegmenterFMP4) writeVideo(
 	}
 
 	if randomAccess {
-		if timeNow.Sub(m.lastSegmentCreatedAt) > 6000000000 {
+		if timeNow.Sub(m.LastSegmentCreatedAt) > 6000000000 {
 			// JJV DEBUG
-			msg := fmt.Sprintf("SKIPPED SEGMENT %s", m.lastSegmentCreatedAt)
+			msg := fmt.Sprintf("SKIPPED SEGMENT %s", m.LastSegmentCreatedAt)
 			m.TestPrint(msg)
-			m.lastSegmentCreatedAt = time.Now()
+			m.LastSegmentCreatedAt = time.Now()
 		}
 	}
 
@@ -384,7 +384,7 @@ func (m *muxerSegmenterFMP4) writeVideo(
 			forceSwitch) {
 
 		// JJV DEBUG
-		m.lastSegmentCreatedAt = time.Now()
+		m.LastSegmentCreatedAt = time.Now()
 
 		err := m.currentSegment.finalize(m.nextVideoSample.dts)
 		if err != nil {
