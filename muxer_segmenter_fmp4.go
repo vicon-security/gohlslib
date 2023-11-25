@@ -390,7 +390,7 @@ func (m *muxerSegmenterFMP4) writeVideo(
 			m.TestPrint(msg)
 			m.LastSegmentCreatedAt = time.Now()
 		}
-	} else if {
+	} else {
 		if timeNow.Sub(m.LastSegmentCreatedAt) > 6000000000 {
 			// JJV DEBUG
 			msg := fmt.Sprintf("SKIPPED SEGMENT11111 %s", m.LastSegmentCreatedAt)
