@@ -333,6 +333,9 @@ func (m *muxerSegmenterFMP4) writeVideo(
 	// - check if next sample is IDR
 	sample, m.nextVideoSample = m.nextVideoSample, sample
 	if sample == nil {
+		msg := fmt.Sprintf("NIL SAMPLE")
+		m.TestPrint(msg)
+		m.LastSegmentCreatedAt = time.Now()
 		return nil
 	}
 	sample.Duration = uint32(durationGoToMp4(m.nextVideoSample.dts-sample.dts, 90000))
@@ -365,6 +368,9 @@ func (m *muxerSegmenterFMP4) writeVideo(
 
 	err := m.currentSegment.writeVideo(sample, m.nextVideoSample.dts, m.adjustedPartDuration)
 	if err != nil {
+		msg := fmt.Sprintf("ERROR: %s", err)
+		m.TestPrint(msg)
+		m.LastSegmentCreatedAt = time.Now()
 		return err
 	}
 
@@ -372,6 +378,13 @@ func (m *muxerSegmenterFMP4) writeVideo(
 		if timeNow.Sub(m.LastSegmentCreatedAt) > 6000000000 {
 			// JJV DEBUG
 			msg := fmt.Sprintf("SKIPPED SEGMENT %s", m.LastSegmentCreatedAt)
+			m.TestPrint(msg)
+			m.LastSegmentCreatedAt = time.Now()
+		}
+	} else if {
+		if timeNow.Sub(m.LastSegmentCreatedAt) > 6000000000 {
+			// JJV DEBUG
+			msg := fmt.Sprintf("SKIPPED SEGMENT11111 %s", m.LastSegmentCreatedAt)
 			m.TestPrint(msg)
 			m.LastSegmentCreatedAt = time.Now()
 		}
