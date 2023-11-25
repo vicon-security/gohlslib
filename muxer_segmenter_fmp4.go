@@ -304,7 +304,7 @@ func (m *muxerSegmenterFMP4) writeH26x(
 	dts, err = m.videoDTSExtractor.Extract(au, pts)
 	if err != nil {
 		// JJV DEBUG
-		msg := fmt.Sprintf("DTSError")
+		msg := fmt.Sprintf("DTSError: %v", err)
 		m.TestPrint(msg)
 		return fmt.Errorf("unable to extract DTS: %v", err)
 	}
