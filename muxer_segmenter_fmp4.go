@@ -290,6 +290,9 @@ func (m *muxerSegmenterFMP4) writeH26x(
 	if !m.videoFirstRandomAccessReceived {
 		// skip sample silently until we find one with an IDR
 		if !randomAccess {
+			// JJV DEBUG
+			msg := fmt.Sprintf("randomAccessError")
+			m.TestPrint(msg)
 			return nil
 		}
 
@@ -300,6 +303,9 @@ func (m *muxerSegmenterFMP4) writeH26x(
 	var err error
 	dts, err = m.videoDTSExtractor.Extract(au, pts)
 	if err != nil {
+		// JJV DEBUG
+		msg := fmt.Sprintf("DTSError")
+		m.TestPrint(msg)
 		return fmt.Errorf("unable to extract DTS: %v", err)
 	}
 
@@ -308,6 +314,9 @@ func (m *muxerSegmenterFMP4) writeH26x(
 		randomAccess,
 		au)
 	if err != nil {
+		// JJV DEBUG
+		msg := fmt.Sprintf("PartError")
+		m.TestPrint(msg)
 		return err
 	}
 
