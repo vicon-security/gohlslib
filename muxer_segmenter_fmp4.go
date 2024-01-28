@@ -361,7 +361,7 @@ func (m *muxerSegmenterFMP4) writeVideo(
 
 	// switch segment
 	if randomAccess &&
-		(((m.writeSegmentsOnClockInterval && int(timeNow.Second()) % m.secondsInterval == 0) && ((m.nextVideoSample.dts-m.currentSegment.startDTS) > time.Second)) ||
+		((m.writeSegmentsOnClockInterval && int(timeNow.Second()) % m.secondsInterval == 0) ||
 			(!m.writeSegmentsOnClockInterval && ((m.nextVideoSample.dts-m.currentSegment.startDTS) >= m.segmentDuration)) ||
 			forceSwitch) {
 
