@@ -308,7 +308,7 @@ func updateMediaPlaylistFMP4(
 			segURI := seg.name
 
 			if len(segmentURIPrefix) > 0 {
-				plTime, _ := time.Parse("2006-01-02T15_04_05_000Z", initFilename)
+				plTime, _ := time.Parse("2006-01-02T15_04_05.000Z", initFilename)
 				dateFolder := fmt.Sprintf("%d/%02d/%02d/%02d", plTime.Year(), plTime.Month(), plTime.Day(), plTime.Hour())
 				segURI = fmt.Sprintf("%s/%s/%s", segmentURIPrefix, dateFolder, seg.name)
 			}
@@ -911,11 +911,11 @@ func (s *muxerServer) publishSegment(segment muxerSegment) error {
 		s.nextSegmentParts = s.nextSegmentParts[:0]
 
 		startSegName := s.segments[0].getName()
-		startSegmentTime, _ := time.Parse("2006-01-02T15_04_05_000Z", startSegName[:len(startSegName)-4])
+		startSegmentTime, _ := time.Parse("2006-01-02T15_04_05.000Z", startSegName[:len(startSegName)-4])
 		startSegmentMinuteInterval := startSegmentTime.Truncate(s.playlistMinutesInterval)
 
 		currentSegmentName := segment.getName()
-		currentSegmentTime, _ := time.Parse("2006-01-02T15_04_05_000Z", currentSegmentName[:len(currentSegmentName)-4])
+		currentSegmentTime, _ := time.Parse("2006-01-02T15_04_05.000Z", currentSegmentName[:len(currentSegmentName)-4])
 		currentSegmentMinuteInterval := currentSegmentTime.Truncate(s.playlistMinutesInterval)
 
 		if currentSegmentMinuteInterval.Compare(startSegmentMinuteInterval) > 0 {
@@ -935,7 +935,7 @@ func (s *muxerServer) publishSegment(segment muxerSegment) error {
 			// s.segmentDeleteCount++ // Removed as this only applies for live streams where we are dynamically adjusting the playlist
 		}
 
-		s.playlistName = currentSegmentMinuteInterval.Format("2006-01-02T15_04_05_000Z")
+		s.playlistName = currentSegmentMinuteInterval.Format("2006-01-02T15_04_05.000Z")
 		playlistFullpath := s.storageFactory.GetPath() + "/" + s.playlistName + ".m3u8"
 
 		if len(s.segments) == 1 {
