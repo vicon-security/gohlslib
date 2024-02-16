@@ -360,11 +360,7 @@ func (m *muxerSegmenterFMP4) writeVideo(
 	}
 
 	// switch segment
-	if randomAccess &&
-		(((m.writeSegmentsOnClockInterval && int(timeNow.Second()) % m.secondsInterval == 0) && ((m.nextVideoSample.dts-m.currentSegment.startDTS) > time.Second)) ||
-			(!m.writeSegmentsOnClockInterval && ((m.nextVideoSample.dts-m.currentSegment.startDTS) >= m.segmentDuration)) ||
-			forceSwitch) {
-
+	if (m.nextVideoSample.dts-m.currentSegment.startDTS) >= m.segmentDuration {
 		err := m.currentSegment.finalize(m.nextVideoSample.dts)
 		if err != nil {
 			return err
@@ -376,39 +372,8 @@ func (m *muxerSegmenterFMP4) writeVideo(
 		}
 
 		m.firstSegmentFinalized = true
-
-		if m.queuedToStopSegments {
-			m.queuedToStopSegments = false
-			m.stopSegments = true
-			m.currentSegment = nil
-			return nil
-		}
-
-		m.currentSegment, err = newMuxerSegmentFMP4(
-			m.lowLatency,
-			m.genSegmentID(),
-			m.nextVideoSample.ntp,
-			m.nextVideoSample.dts,
-			m.segmentMaxSize,
-			m.videoTrack,
-			m.audioTrack,
-			m.audioTimeScale,
-			m.nextVideoSample.ntp.Format("2006-01-02T15_04_05Z"),
-			forceSwitch,
-			m.factory,
-			m.genPartID,
-			m.publishPart,
-		)
-		if err != nil {
-			return err
-		}
-
-		if forceSwitch {
-			m.firstSegmentFinalized = false
-
-			// reset adjusted part duration
-			m.sampleDurations = make(map[time.Duration]struct{})
-		}
+		m.currentSegment = nil
+		return nil
 	}
 
 	return nil
