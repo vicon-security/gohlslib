@@ -327,7 +327,6 @@ func (m *muxerSegmenterFMP4) writeVideo(
 		return nil
 	}
 	sample.Duration = uint32(durationGoToMp4(m.nextVideoSample.dts-sample.dts, 90000))
-	timeNow := time.Now()
 
 	if m.currentSegment == nil {
 		// create first segment
@@ -361,7 +360,7 @@ func (m *muxerSegmenterFMP4) writeVideo(
 
 	// switch segment
 	if randomAccess &&
-		(((m.writeSegmentsOnClockInterval && int(timeNow.Second()) % m.secondsInterval == 0) && ((m.nextVideoSample.dts-m.currentSegment.startDTS) > time.Second)) ||
+		(((m.writeSegmentsOnClockInterval && int(m.nextVideoSample.ntp.Second()) % m.secondsInterval == 0) && ((m.nextVideoSample.dts-m.currentSegment.startDTS) > time.Second)) ||
 			(!m.writeSegmentsOnClockInterval && ((m.nextVideoSample.dts-m.currentSegment.startDTS) >= m.segmentDuration)) ||
 			forceSwitch) {
 
