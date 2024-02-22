@@ -275,6 +275,7 @@ func (m *muxerSegmenterFMP4) writeH26x(
 	au [][]byte,
 	randomAccess bool,
 	forceSwitch bool,
+	stoppingFrame bool,
 ) error {
 	var dts time.Duration
 
@@ -311,13 +312,16 @@ func (m *muxerSegmenterFMP4) writeH26x(
 	return m.writeVideo(
 		randomAccess,
 		forceSwitch,
-		sample)
+		sample,
+		stoppingFrame,
+	)
 }
 
 func (m *muxerSegmenterFMP4) writeVideo(
 	randomAccess bool,
 	forceSwitch bool,
 	sample *augmentedVideoSample,
+	stoppingFrame bool,
 ) error {
 	// put samples into a queue in order to
 	// - compute sample duration
@@ -377,7 +381,7 @@ func (m *muxerSegmenterFMP4) writeVideo(
 
 		m.firstSegmentFinalized = true
 
-		if m.queuedToStopSegments {
+		if m.queuedToStopSegments || stoppingFrame {
 			m.queuedToStopSegments = false
 			m.stopSegments = true
 			m.currentSegment = nil

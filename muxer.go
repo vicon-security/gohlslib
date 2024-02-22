@@ -285,7 +285,7 @@ func (m *Muxer) WriteVP9(ntp time.Time, pts time.Duration, frame []byte) error {
 }
 
 // WriteH26x writes an H264 or an H265 access unit.
-func (m *Muxer) WriteH26x(ntp time.Time, pts time.Duration, au [][]byte) error {
+func (m *Muxer) WriteH26x(ntp time.Time, pts time.Duration, au [][]byte, stoppingFrame bool) error {
 	randomAccess := false
 
 	switch codec := m.VideoTrack.Codec.(type) {
@@ -359,7 +359,7 @@ func (m *Muxer) WriteH26x(ntp time.Time, pts time.Duration, au [][]byte) error {
 		return nil
 	}
 
-	return m.segmenter.writeH26x(ntp, pts, au, randomAccess, forceSwitch)
+	return m.segmenter.writeH26x(ntp, pts, au, randomAccess, forceSwitch, stoppingFrame)
 }
 
 // WriteOpus writes Opus packets.

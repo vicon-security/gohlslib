@@ -108,6 +108,7 @@ func (t *muxerSegmentMPEGTS) writeH264(
 	dts time.Duration,
 	idrPresent bool,
 	au [][]byte,
+	stoppingFrame bool,
 ) error {
 	size := uint64(0)
 	for _, nalu := range au {
@@ -121,7 +122,7 @@ func (t *muxerSegmentMPEGTS) writeH264(
 	// prepend an AUD. This is required by video.js and iOS
 	au = append([][]byte{{byte(h264.NALUTypeAccessUnitDelimiter), 240}}, au...)
 
-	err := t.writer.WriteH26x(t.writerVideoTrack, durationGoToMPEGTS(pts), durationGoToMPEGTS(dts), idrPresent, au)
+	err := t.writer.WriteH26x(t.writerVideoTrack, durationGoToMPEGTS(pts), durationGoToMPEGTS(dts), idrPresent, au, stoppingFrame)
 	if err != nil {
 		return err
 	}
