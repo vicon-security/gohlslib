@@ -235,7 +235,9 @@ func (m *muxerSegmenterFMP4) writeAV1(
 	return m.writeVideo(
 		randomAccess,
 		forceSwitch,
-		sample)
+		sample,
+		false,
+	)
 }
 
 func (m *muxerSegmenterFMP4) writeVP9(
@@ -266,7 +268,9 @@ func (m *muxerSegmenterFMP4) writeVP9(
 	return m.writeVideo(
 		randomAccess,
 		forceSwitch,
-		sample)
+		sample,
+		false,
+	)
 }
 
 func (m *muxerSegmenterFMP4) writeH26x(

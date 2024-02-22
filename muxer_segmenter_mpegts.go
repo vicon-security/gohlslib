@@ -197,7 +197,9 @@ func (m *muxerSegmenterMPEGTS) writeH26x(
 		pts,
 		dts,
 		randomAccessPresent,
-		au)
+		au,
+		stoppingFrame,
+	)
 	if err != nil {
 		return err
 	}
