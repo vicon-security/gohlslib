@@ -123,6 +123,7 @@ func (m *muxerSegmenterMPEGTS) writeH26x(
 	au [][]byte,
 	randomAccessPresent bool,
 	forceSwitch bool,
+	stoppingFrame bool,
 ) error {
 	var dts time.Duration
 
@@ -196,7 +197,9 @@ func (m *muxerSegmenterMPEGTS) writeH26x(
 		pts,
 		dts,
 		randomAccessPresent,
-		au)
+		au,
+		stoppingFrame,
+	)
 	if err != nil {
 		return err
 	}

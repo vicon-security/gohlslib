@@ -108,6 +108,7 @@ func (t *muxerSegmentMPEGTS) writeH264(
 	dts time.Duration,
 	idrPresent bool,
 	au [][]byte,
+	stoppingFrame bool,
 ) error {
 	size := uint64(0)
 	for _, nalu := range au {
