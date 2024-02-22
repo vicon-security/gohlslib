@@ -385,7 +385,12 @@ func (m *muxerSegmenterFMP4) writeVideo(
 
 		m.firstSegmentFinalized = true
 
-		if m.queuedToStopSegments || stoppingFrame {
+		if stoppingFrame {
+			m.currentSegment = nil
+			return nil
+		}
+
+		if m.queuedToStopSegments {
 			m.queuedToStopSegments = false
 			m.stopSegments = true
 			m.currentSegment = nil
