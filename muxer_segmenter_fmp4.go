@@ -367,6 +367,10 @@ func (m *muxerSegmenterFMP4) writeVideo(
 		return err
 	}
 
+	if stoppingFrame {
+		fmt.Printf("STOP FRAME\n")
+	}
+
 	// switch segment
 	if randomAccess &&
 		(((m.writeSegmentsOnClockInterval && int(timeNow.Second()) % m.secondsInterval == 0) && ((m.nextVideoSample.dts-m.currentSegment.startDTS) > time.Second)) ||
@@ -386,6 +390,7 @@ func (m *muxerSegmenterFMP4) writeVideo(
 		m.firstSegmentFinalized = true
 
 		if stoppingFrame {
+			fmt.Printf("STOPPED\n")
 			m.currentSegment = nil
 			return nil
 		}
