@@ -391,6 +391,7 @@ func (m *muxerSegmenterFMP4) writeVideo(
 
 		if stoppingFrame {
 			fmt.Printf("STOPPED\n")
+			m.nextVideoSample = nil
 			m.currentSegment = nil
 			return nil
 		}
