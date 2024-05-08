@@ -242,6 +242,9 @@ func (m *Media) Unmarshal(buf []byte) error {
 		case line == "#EXT-X-GAP":
 			curSegment.Gap = true
 
+		case line == "#EXT-X-DISCONTINUITY":
+			curSegment.Discontinuity = true
+
 		case strings.HasPrefix(line, "#EXT-X-BITRATE:"):
 			line = line[len("#EXT-X-BITRATE:"):]
 
