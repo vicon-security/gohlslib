@@ -10,6 +10,9 @@ import (
 
 // MediaSegment is a segment of a media playlist.
 type MediaSegment struct {
+	// #EXT-X-DISCONTINUITY
+	Discontinuity bool
+
 	// #EXTINF
 	// required
 	Duration time.Duration
@@ -49,6 +52,10 @@ func (s MediaSegment) validate() error {
 
 func (s MediaSegment) marshal() string {
 	ret := ""
+
+	if s.Discontinuity {
+		ret += "#EXT-X-DISCONTINUITY\n"
+	}
 
 	if s.DateTime != nil {
 		ret += "#EXT-X-PROGRAM-DATE-TIME:" + s.DateTime.Format(timeRFC3339Millis) + "\n"
