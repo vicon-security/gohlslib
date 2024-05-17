@@ -91,6 +91,17 @@ func (m *muxerSegmenterMPEGTS) close() {
 	}
 }
 
+func (m *muxerSegmenterFMP4) reset() {
+	if m.currentSegment != nil {
+		m.currentSegment.finalize(0) //nolint:errcheck
+		m.currentSegment.close()
+	}
+	m.nextVideoSample = nil
+	m.firstSegmentFinalized = false
+	m.sampleDurations = make(map[time.Duration]struct{})
+}
+
+
 func (m *muxerSegmenterMPEGTS) genSegmentID() uint64 {
 	id := m.nextSegmentID
 	m.nextSegmentID++
