@@ -581,7 +581,7 @@ func (s *muxerServer) reset() {
 	}
 
 	s.segments = make([]muxerSegment)
-	s.segmentsByName = make(map[string]muxerSegment),
+	s.segmentsByName = make(map[string]muxerSegment)
 	s.partsByName = make(map[string]*muxerPart)
 
 	if s.init != nil {
