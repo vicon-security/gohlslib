@@ -91,6 +91,13 @@ func (m *muxerSegmenterMPEGTS) close() {
 	}
 }
 
+func (m *muxerSegmenterMPEGTS) reset() {
+	if m.currentSegment != nil {
+		m.currentSegment.finalize(0) //nolint:errcheck
+		m.currentSegment.close()
+	}
+}
+
 func (m *muxerSegmenterMPEGTS) genSegmentID() uint64 {
 	id := m.nextSegmentID
 	m.nextSegmentID++

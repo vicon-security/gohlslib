@@ -204,6 +204,11 @@ func (m *Muxer) Close() {
 	m.segmenter.close()
 }
 
+func (m *Muxer) Reset() {
+	m.server.close()
+	m.segmenter.reset()
+}
+
 // WriteAV1 writes an AV1 temporal unit.
 func (m *Muxer) WriteAV1(ntp time.Time, pts time.Duration, tu [][]byte) error {
 	codec := m.VideoTrack.Codec.(*codecs.AV1)

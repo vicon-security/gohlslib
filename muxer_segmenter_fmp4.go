@@ -100,6 +100,9 @@ type muxerSegmenterFMP4 struct {
 	factory         storage.Factory
 	publishSegment  func(muxerSegment) error
 	publishPart     func(*muxerPart)
+	// Force segments to be created/written at specific times of the day
+	writeSegmentsOnClockInterval	bool
+	secondsInterval								int
 
 	audioTimeScale                 uint32
 	videoFirstRandomAccessReceived bool
@@ -112,10 +115,6 @@ type muxerSegmenterFMP4 struct {
 	firstSegmentFinalized          bool
 	sampleDurations                map[time.Duration]struct{}
 	adjustedPartDuration           time.Duration
-
-	// Force segments to be created/written at specific times of the day
-	writeSegmentsOnClockInterval	bool
-	secondsInterval								int
 
 	queuedToStopSegments					bool
 	stopSegments									bool
@@ -168,6 +167,16 @@ func (m *muxerSegmenterFMP4) close() {
 		m.currentSegment.finalize(0) //nolint:errcheck
 		m.currentSegment.close()
 	}
+}
+
+func (m *muxerSegmenterFMP4) reset() {
+	if m.currentSegment != nil {
+		m.currentSegment.finalize(0) //nolint:errcheck
+		m.currentSegment.close()
+	}
+	m.nextVideoSample = nil
+	m.firstSegmentFinalized = false
+	m.sampleDurations = make(map[time.Duration]struct{})
 }
 
 func (m *muxerSegmenterFMP4) genSegmentID() uint64 {
@@ -386,6 +395,7 @@ func (m *muxerSegmenterFMP4) writeVideo(
 		m.firstSegmentFinalized = true
 
 		if stoppingFrame {
+			m.firstSegmentFinalized = false
 			m.nextVideoSample = nil
 			m.currentSegment = nil
 			return nil
