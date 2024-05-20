@@ -580,7 +580,7 @@ func (s *muxerServer) reset() {
 		segment.close()
 	}
 
-	s.segments = make([]muxerSegment)
+	s.segments = []muxerSegment{}
 	s.segmentsByName = make(map[string]muxerSegment)
 	s.partsByName = make(map[string]*muxerPart)
 
