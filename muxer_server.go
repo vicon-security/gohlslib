@@ -567,6 +567,28 @@ func (s *muxerServer) close() {
 	}
 }
 
+func (s *muxerServer) reset() {
+	func() {
+		s.mutex.Lock()
+		defer s.mutex.Unlock()
+		s.closed = true
+	}()
+
+	s.cond.Broadcast()
+
+	for _, segment := range s.segments {
+		segment.close()
+	}
+
+	s.segments = make([]muxerSegment)
+	s.segmentsByName = make(map[string]muxerSegment),
+	s.partsByName = make(map[string]*muxerPart)
+
+	if s.init != nil {
+		s.init.Remove()
+	}
+}
+
 func (s *muxerServer) hasContent() bool {
 	if s.variant == MuxerVariantFMP4 {
 		return len(s.segments) >= 2
