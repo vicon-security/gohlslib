@@ -205,7 +205,6 @@ func (m *Muxer) Close() {
 }
 
 func (m *Muxer) Reset() {
-	m.server.close()
 	m.segmenter.reset()
 }
 
