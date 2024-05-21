@@ -205,7 +205,22 @@ func (m *Muxer) Close() {
 }
 
 func (m *Muxer) Reset() {
-	m.segmenter.reset()
+	m.segmenter.close()
+
+	m.segmenter = newMuxerSegmenterFMP4(
+		m.Variant == MuxerVariantLowLatency,
+		m.SegmentDuration,
+		m.PartDuration,
+		m.SegmentMaxSize,
+		m.VideoTrack,
+		m.AudioTrack,
+		m.prefix,
+		m.storageFactory,
+		m.server.publishSegment,
+		m.server.publishPart,
+		m.WriteSegmentsOnClockInterval,
+		m.SegmentSecondsInterval,
+	)
 }
 
 // WriteAV1 writes an AV1 temporal unit.
