@@ -20,7 +20,7 @@ func fmp4TimeScale(c codecs.Codec) uint32 {
 		return uint32(codec.SampleRate)
 
 	case *codecs.Opus:
-		return 48000
+		return 8000
 	}
 
 	return 0
