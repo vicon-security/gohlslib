@@ -177,6 +177,7 @@ func (m *muxerSegmenterFMP4) reset() {
 	
 	m.currentSegment = nil
 	m.nextVideoSample = nil
+	m.nextAudioSample = nil
 	m.firstSegmentFinalized = false
 	m.sampleDurations = make(map[time.Duration]struct{})
 }
@@ -399,6 +400,7 @@ func (m *muxerSegmenterFMP4) writeVideo(
 		if stoppingFrame {
 			m.firstSegmentFinalized = false
 			m.nextVideoSample = nil
+			m.nextAudioSample = nil
 			m.currentSegment = nil
 			return nil
 		}
