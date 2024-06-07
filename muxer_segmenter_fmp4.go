@@ -461,9 +461,16 @@ func (m *muxerSegmenterFMP4) writeMPEG4Audio(ntp time.Time, pts time.Duration, a
 	sampleRate := time.Duration(m.audioTrack.Codec.(*codecs.MPEG4Audio).Config.SampleRate)
 
 	for i, au := range aus {
+
+		/*
 		auNTP := ntp.Add(time.Duration(i) * mpeg4audio.SamplesPerAccessUnit *
 			time.Second / sampleRate)
 		auPTS := pts + time.Duration(i)*mpeg4audio.SamplesPerAccessUnit*
+			time.Second/sampleRate
+		*/
+		auNTP := ntp.Add(time.Duration(i) * 768 *
+			time.Second / sampleRate)
+		auPTS := pts + time.Duration(i) * 768 *
 			time.Second/sampleRate
 
 		err := m.writeAudio(auNTP, auPTS, au)
