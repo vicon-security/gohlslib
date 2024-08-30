@@ -918,6 +918,8 @@ func (s *muxerServer) publishSegment(segment muxerSegment) error {
 		currentSegmentTime, _ := time.Parse("2006-01-02T15_04_05Z", currentSegmentName[:len(currentSegmentName)-4])
 		currentSegmentMinuteInterval := currentSegmentTime.Truncate(s.playlistMinutesInterval)
 
+		fmt.Printf("currentSegmentName: %v\n", currentSegmentName)
+
 		if currentSegmentMinuteInterval.Compare(startSegmentMinuteInterval) > 0 {
 			segmentsToRemove := s.segments[:len(s.segments)-1]
 
