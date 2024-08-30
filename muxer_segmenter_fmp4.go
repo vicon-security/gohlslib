@@ -412,6 +412,8 @@ func (m *muxerSegmenterFMP4) writeVideo(
 			return nil
 		}
 
+		fmt.Printf("Segment NTP: %v\n", m.nextVideoSample.ntp)
+
 		m.currentSegment, err = newMuxerSegmentFMP4(
 			m.lowLatency,
 			m.genSegmentID(),
