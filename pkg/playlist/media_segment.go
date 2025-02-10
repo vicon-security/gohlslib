@@ -13,6 +13,9 @@ type MediaSegment struct {
 	// #EXT-X-DISCONTINUITY
 	Discontinuity bool
 
+	// #EXT-X-MAP
+	Map *MediaMap
+
 	// #EXTINF
 	// required
 	Duration time.Duration
@@ -52,6 +55,10 @@ func (s MediaSegment) validate() error {
 
 func (s MediaSegment) marshal() string {
 	ret := ""
+
+	if s.Map != nil {
+		ret += s.Map.marshal()
+	}
 
 	if s.Discontinuity {
 		ret += "#EXT-X-DISCONTINUITY\n"
